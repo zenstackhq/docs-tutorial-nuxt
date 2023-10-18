@@ -1,0 +1,25 @@
+{
+    "name": "local-auth",
+    "private": true,
+    "scripts": {
+        "generate": "zenstack generate && prisma db push",
+        "build": "npm run generate && nuxi build",
+        "dev": "nuxi dev",
+        "start": "nuxi preview",
+        "package-clean": "npm rm @zenstackhq/runtime @zenstackhq/server zenstack @zenstackhq/tanstack-query",
+        "up": "npm run package-clean && npm i @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D zenstack@latest @zenstackhq/tanstack-query@latest",
+        "up-preview": "npm run package-clean && npm i --registry https://preview.registry.zenstack.dev @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D --registry https://preview.registry.zenstack.dev zenstack@latest @zenstackhq/tanstack-query@latest"
+    },
+    "devDependencies": {
+        "@nuxt/ui": "^0.4.1",
+        "nuxt": "^3.6.5",
+        "prisma": "^5.4.2",
+        "uncrypto": "^0.1.2",
+        "zenstack": "^1.1.0"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.4.2",
+        "@tanstack/vue-query": "^4.37.0",
+        "isomorphic-fetch": "^3.0.0"
+    }
+}
