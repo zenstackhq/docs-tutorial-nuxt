@@ -7,22 +7,21 @@
         "dev": "nuxi dev",
         "start": "nuxi preview",
         "package-clean": "npm rm @zenstackhq/runtime @zenstackhq/server zenstack @zenstackhq/tanstack-query",
-        "up": "npm run package-clean && npm i @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D zenstack@latest @zenstackhq/tanstack-query@latest",
-        "up-preview": "npm run package-clean && npm i --registry https://preview.registry.zenstack.dev @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D --registry https://preview.registry.zenstack.dev zenstack@latest @zenstackhq/tanstack-query@latest"
+        "up": "npm run package-clean && npm i @zenstackhq/runtime@next @zenstackhq/server@next && npm i -D zenstack@next @zenstackhq/tanstack-query@next"
     },
     "devDependencies": {
         "@nuxt/ui": "^0.4.1",
-        "@zenstackhq/tanstack-query": "^1.9.0",
+        "@zenstackhq/tanstack-query": "^2.0.0-beta.10",
         "nuxt": "^3.6.5",
-        "prisma": "^5.4.2",
+        "prisma": "^5.12.1",
         "uncrypto": "^0.1.2",
-        "zenstack": "^1.9.0"
+        "zenstack": "^2.0.0-beta.10"
     },
     "dependencies": {
-        "@prisma/client": "^5.4.2",
+        "@prisma/client": "^5.12.1",
         "@tanstack/vue-query": "^4.37.0",
-        "@zenstackhq/runtime": "^1.9.0",
-        "@zenstackhq/server": "^1.9.0",
+        "@zenstackhq/runtime": "^2.0.0-beta.10",
+        "@zenstackhq/server": "^2.0.0-beta.10",
         "isomorphic-fetch": "^3.0.0"
     }
 }
