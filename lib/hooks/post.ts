@@ -2,18 +2,23 @@
 import type { Prisma, Post } from '@prisma/client';
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/vue-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime/vue';
+import type { MaybeRefOrGetter, ComputedRef } from 'vue';
 import { useModelQuery, useInfiniteModelQuery, useModelMutation } from '@zenstackhq/tanstack-query/runtime/vue';
-import type { PickEnumerable, CheckSelect } from '@zenstackhq/tanstack-query/runtime';
+import type { PickEnumerable, CheckSelect, QueryError } from '@zenstackhq/tanstack-query/runtime';
 import metadata from './__model_meta';
-type DefaultError = Error;
+type DefaultError = QueryError;
 
 export function useCreatePost(
-    options?: Omit<UseMutationOptions<Post | undefined, unknown, Prisma.PostCreateArgs, unknown>, 'mutationFn'>,
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostCreateArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostCreateArgs, unknown>>,
+        'mutationFn'
+    >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.PostCreateArgs, Post, true>(
+    const _mutation = useModelMutation<Prisma.PostCreateArgs, DefaultError, Post, true>(
         'Post',
         'POST',
         `${endpoint}/post/create`,
@@ -29,12 +34,22 @@ export function useCreatePost(
         mutateAsync: async <T extends Prisma.PostCreateArgs>(
             args: Prisma.SelectSubset<T, Prisma.PostCreateArgs>,
             options?: Omit<
-                UseMutationOptions<
-                    CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
-                    unknown,
-                    Prisma.SelectSubset<T, Prisma.PostCreateArgs>,
-                    unknown
-                >,
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostCreateArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostCreateArgs>,
+                          unknown
+                      >
+                  >,
                 'mutationFn'
             >,
         ) => {
@@ -46,14 +61,69 @@ export function useCreatePost(
     return mutation;
 }
 
+export function useCreateManyPost(
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.PostCreateManyArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.PostCreateManyArgs, unknown>>,
+        'mutationFn'
+    >,
+    invalidateQueries: boolean = true,
+    optimisticUpdate: boolean = false,
+) {
+    const { endpoint, fetch } = getHooksContext();
+    const _mutation = useModelMutation<Prisma.PostCreateManyArgs, DefaultError, Prisma.BatchPayload, false>(
+        'Post',
+        'POST',
+        `${endpoint}/post/createMany`,
+        metadata,
+        options,
+        fetch,
+        invalidateQueries,
+        false,
+        optimisticUpdate,
+    );
+    const mutation = {
+        ..._mutation,
+        mutateAsync: async <T extends Prisma.PostCreateManyArgs>(
+            args: Prisma.SelectSubset<T, Prisma.PostCreateManyArgs>,
+            options?: Omit<
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          Prisma.BatchPayload,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostCreateManyArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          Prisma.BatchPayload,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostCreateManyArgs>,
+                          unknown
+                      >
+                  >,
+                'mutationFn'
+            >,
+        ) => {
+            return (await _mutation.mutateAsync(args, options as any)) as Prisma.BatchPayload;
+        },
+    };
+    return mutation;
+}
+
 export function useFindManyPost<
     TArgs extends Prisma.PostFindManyArgs,
     TQueryFnData = Array<Prisma.PostGetPayload<TArgs> & { $optimistic?: boolean }>,
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args?: Prisma.SelectSubset<TArgs, Prisma.PostFindManyArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args?:
+        | MaybeRefOrGetter<Prisma.SelectSubset<TArgs, Prisma.PostFindManyArgs>>
+        | ComputedRef<Prisma.SelectSubset<TArgs, Prisma.PostFindManyArgs>>,
+    options?:
+        | MaybeRefOrGetter<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
     optimisticUpdate: boolean = true,
 ) {
     const { endpoint, fetch } = getHooksContext();
@@ -73,8 +143,12 @@ export function useInfiniteFindManyPost<
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args?: Prisma.SelectSubset<TArgs, Prisma.PostFindManyArgs>,
-    options?: Omit<UseInfiniteQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args?:
+        | MaybeRefOrGetter<Prisma.SelectSubset<TArgs, Prisma.PostFindManyArgs>>
+        | ComputedRef<Prisma.SelectSubset<TArgs, Prisma.PostFindManyArgs>>,
+    options?:
+        | MaybeRefOrGetter<Omit<UseInfiniteQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseInfiniteQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
 ) {
     const { endpoint, fetch } = getHooksContext();
     return useInfiniteModelQuery<TQueryFnData, TData, TError>(
@@ -92,8 +166,12 @@ export function useFindUniquePost<
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args: Prisma.SelectSubset<TArgs, Prisma.PostFindUniqueArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args:
+        | MaybeRefOrGetter<Prisma.SelectSubset<TArgs, Prisma.PostFindUniqueArgs>>
+        | ComputedRef<Prisma.SelectSubset<TArgs, Prisma.PostFindUniqueArgs>>,
+    options?:
+        | MaybeRefOrGetter<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
     optimisticUpdate: boolean = true,
 ) {
     const { endpoint, fetch } = getHooksContext();
@@ -113,8 +191,12 @@ export function useFindFirstPost<
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args?: Prisma.SelectSubset<TArgs, Prisma.PostFindFirstArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args?:
+        | MaybeRefOrGetter<Prisma.SelectSubset<TArgs, Prisma.PostFindFirstArgs>>
+        | ComputedRef<Prisma.SelectSubset<TArgs, Prisma.PostFindFirstArgs>>,
+    options?:
+        | MaybeRefOrGetter<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
     optimisticUpdate: boolean = true,
 ) {
     const { endpoint, fetch } = getHooksContext();
@@ -129,12 +211,16 @@ export function useFindFirstPost<
 }
 
 export function useUpdatePost(
-    options?: Omit<UseMutationOptions<Post | undefined, unknown, Prisma.PostUpdateArgs, unknown>, 'mutationFn'>,
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostUpdateArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostUpdateArgs, unknown>>,
+        'mutationFn'
+    >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.PostUpdateArgs, Post, true>(
+    const _mutation = useModelMutation<Prisma.PostUpdateArgs, DefaultError, Post, true>(
         'Post',
         'PUT',
         `${endpoint}/post/update`,
@@ -150,12 +236,22 @@ export function useUpdatePost(
         mutateAsync: async <T extends Prisma.PostUpdateArgs>(
             args: Prisma.SelectSubset<T, Prisma.PostUpdateArgs>,
             options?: Omit<
-                UseMutationOptions<
-                    CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
-                    unknown,
-                    Prisma.SelectSubset<T, Prisma.PostUpdateArgs>,
-                    unknown
-                >,
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostUpdateArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostUpdateArgs>,
+                          unknown
+                      >
+                  >,
                 'mutationFn'
             >,
         ) => {
@@ -168,12 +264,16 @@ export function useUpdatePost(
 }
 
 export function useUpdateManyPost(
-    options?: Omit<UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.PostUpdateManyArgs, unknown>, 'mutationFn'>,
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.PostUpdateManyArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.PostUpdateManyArgs, unknown>>,
+        'mutationFn'
+    >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.PostUpdateManyArgs, Prisma.BatchPayload, false>(
+    const _mutation = useModelMutation<Prisma.PostUpdateManyArgs, DefaultError, Prisma.BatchPayload, false>(
         'Post',
         'PUT',
         `${endpoint}/post/updateMany`,
@@ -189,12 +289,22 @@ export function useUpdateManyPost(
         mutateAsync: async <T extends Prisma.PostUpdateManyArgs>(
             args: Prisma.SelectSubset<T, Prisma.PostUpdateManyArgs>,
             options?: Omit<
-                UseMutationOptions<
-                    Prisma.BatchPayload,
-                    unknown,
-                    Prisma.SelectSubset<T, Prisma.PostUpdateManyArgs>,
-                    unknown
-                >,
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          Prisma.BatchPayload,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostUpdateManyArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          Prisma.BatchPayload,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostUpdateManyArgs>,
+                          unknown
+                      >
+                  >,
                 'mutationFn'
             >,
         ) => {
@@ -205,12 +315,16 @@ export function useUpdateManyPost(
 }
 
 export function useUpsertPost(
-    options?: Omit<UseMutationOptions<Post | undefined, unknown, Prisma.PostUpsertArgs, unknown>, 'mutationFn'>,
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostUpsertArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostUpsertArgs, unknown>>,
+        'mutationFn'
+    >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.PostUpsertArgs, Post, true>(
+    const _mutation = useModelMutation<Prisma.PostUpsertArgs, DefaultError, Post, true>(
         'Post',
         'POST',
         `${endpoint}/post/upsert`,
@@ -226,12 +340,22 @@ export function useUpsertPost(
         mutateAsync: async <T extends Prisma.PostUpsertArgs>(
             args: Prisma.SelectSubset<T, Prisma.PostUpsertArgs>,
             options?: Omit<
-                UseMutationOptions<
-                    CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
-                    unknown,
-                    Prisma.SelectSubset<T, Prisma.PostUpsertArgs>,
-                    unknown
-                >,
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostUpsertArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostUpsertArgs>,
+                          unknown
+                      >
+                  >,
                 'mutationFn'
             >,
         ) => {
@@ -244,12 +368,16 @@ export function useUpsertPost(
 }
 
 export function useDeletePost(
-    options?: Omit<UseMutationOptions<Post | undefined, unknown, Prisma.PostDeleteArgs, unknown>, 'mutationFn'>,
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostDeleteArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Post | undefined, DefaultError, Prisma.PostDeleteArgs, unknown>>,
+        'mutationFn'
+    >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.PostDeleteArgs, Post, true>(
+    const _mutation = useModelMutation<Prisma.PostDeleteArgs, DefaultError, Post, true>(
         'Post',
         'DELETE',
         `${endpoint}/post/delete`,
@@ -265,12 +393,22 @@ export function useDeletePost(
         mutateAsync: async <T extends Prisma.PostDeleteArgs>(
             args: Prisma.SelectSubset<T, Prisma.PostDeleteArgs>,
             options?: Omit<
-                UseMutationOptions<
-                    CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
-                    unknown,
-                    Prisma.SelectSubset<T, Prisma.PostDeleteArgs>,
-                    unknown
-                >,
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostDeleteArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          CheckSelect<T, Post, Prisma.PostGetPayload<T>> | undefined,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostDeleteArgs>,
+                          unknown
+                      >
+                  >,
                 'mutationFn'
             >,
         ) => {
@@ -283,12 +421,16 @@ export function useDeletePost(
 }
 
 export function useDeleteManyPost(
-    options?: Omit<UseMutationOptions<Prisma.BatchPayload, unknown, Prisma.PostDeleteManyArgs, unknown>, 'mutationFn'>,
+    options?: Omit<
+        | MaybeRefOrGetter<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.PostDeleteManyArgs, unknown>>
+        | ComputedRef<UseMutationOptions<Prisma.BatchPayload, DefaultError, Prisma.PostDeleteManyArgs, unknown>>,
+        'mutationFn'
+    >,
     invalidateQueries: boolean = true,
     optimisticUpdate: boolean = false,
 ) {
     const { endpoint, fetch } = getHooksContext();
-    const _mutation = useModelMutation<Prisma.PostDeleteManyArgs, Prisma.BatchPayload, false>(
+    const _mutation = useModelMutation<Prisma.PostDeleteManyArgs, DefaultError, Prisma.BatchPayload, false>(
         'Post',
         'DELETE',
         `${endpoint}/post/deleteMany`,
@@ -304,12 +446,22 @@ export function useDeleteManyPost(
         mutateAsync: async <T extends Prisma.PostDeleteManyArgs>(
             args: Prisma.SelectSubset<T, Prisma.PostDeleteManyArgs>,
             options?: Omit<
-                UseMutationOptions<
-                    Prisma.BatchPayload,
-                    unknown,
-                    Prisma.SelectSubset<T, Prisma.PostDeleteManyArgs>,
-                    unknown
-                >,
+                | MaybeRefOrGetter<
+                      UseMutationOptions<
+                          Prisma.BatchPayload,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostDeleteManyArgs>,
+                          unknown
+                      >
+                  >
+                | ComputedRef<
+                      UseMutationOptions<
+                          Prisma.BatchPayload,
+                          DefaultError,
+                          Prisma.SelectSubset<T, Prisma.PostDeleteManyArgs>,
+                          unknown
+                      >
+                  >,
                 'mutationFn'
             >,
         ) => {
@@ -325,8 +477,12 @@ export function useAggregatePost<
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args: Prisma.SelectSubset<TArgs, Prisma.PostAggregateArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args:
+        | MaybeRefOrGetter<Prisma.SelectSubset<TArgs, Prisma.PostAggregateArgs>>
+        | ComputedRef<Prisma.SelectSubset<TArgs, Prisma.PostAggregateArgs>>,
+    options?:
+        | MaybeRefOrGetter<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
 ) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('Post', `${endpoint}/post/aggregate`, args, options, fetch);
@@ -398,11 +554,22 @@ export function useGroupByPost<
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args: Prisma.SelectSubset<
-        TArgs,
-        Prisma.SubsetIntersection<TArgs, Prisma.PostGroupByArgs, OrderByArg> & InputErrors
-    >,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args:
+        | MaybeRefOrGetter<
+              Prisma.SelectSubset<
+                  TArgs,
+                  Prisma.SubsetIntersection<TArgs, Prisma.PostGroupByArgs, OrderByArg> & InputErrors
+              >
+          >
+        | ComputedRef<
+              Prisma.SelectSubset<
+                  TArgs,
+                  Prisma.SubsetIntersection<TArgs, Prisma.PostGroupByArgs, OrderByArg> & InputErrors
+              >
+          >,
+    options?:
+        | MaybeRefOrGetter<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
 ) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('Post', `${endpoint}/post/groupBy`, args, options, fetch);
@@ -418,8 +585,12 @@ export function useCountPost<
     TData = TQueryFnData,
     TError = DefaultError,
 >(
-    args?: Prisma.SelectSubset<TArgs, Prisma.PostCountArgs>,
-    options?: Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>,
+    args?:
+        | MaybeRefOrGetter<Prisma.SelectSubset<TArgs, Prisma.PostCountArgs>>
+        | ComputedRef<Prisma.SelectSubset<TArgs, Prisma.PostCountArgs>>,
+    options?:
+        | MaybeRefOrGetter<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>
+        | ComputedRef<Omit<UseQueryOptions<TQueryFnData, TError, TData>, 'queryKey'>>,
 ) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<TQueryFnData, TData, TError>('Post', `${endpoint}/post/count`, args, options, fetch);
