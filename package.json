@@ -7,7 +7,7 @@
         "dev": "nuxi dev",
         "start": "nuxi preview",
         "package-clean": "npm rm @zenstackhq/runtime @zenstackhq/server zenstack @zenstackhq/tanstack-query",
-        "up": "npm run package-clean && npm i @zenstackhq/runtime@next @zenstackhq/server@next && npm i -D zenstack@next @zenstackhq/tanstack-query@next"
+        "up": "npm run package-clean && npm i @zenstackhq/runtime@latest @zenstackhq/server@latest && npm i -D zenstack@latest @zenstackhq/tanstack-query@latest"
     },
     "devDependencies": {
         "@nuxt/ui": "^0.4.1",
