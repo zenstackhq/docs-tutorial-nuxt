@@ -1,10 +1,3 @@
-// This is a sample model to get you started.
-// Learn how to model you app: https://zenstack.dev/#/modeling-your-app.
-
-/**
- * A sample data source using local sqlite db.
- * See how to use a different db: https://zenstack.dev/#/zmodel-data-source.
- */
 datasource db {
     provider = 'sqlite'
     url = 'file:./dev.db'
