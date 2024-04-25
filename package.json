@@ -11,17 +11,17 @@
     },
     "devDependencies": {
         "@nuxt/ui": "^0.4.1",
-        "@zenstackhq/tanstack-query": "^2.0.0-beta.10",
+        "@zenstackhq/tanstack-query": "^2.0.0",
         "nuxt": "^3.6.5",
         "prisma": "^5.12.1",
         "uncrypto": "^0.1.2",
-        "zenstack": "^2.0.0-beta.10"
+        "zenstack": "^2.0.0"
     },
     "dependencies": {
         "@prisma/client": "^5.12.1",
         "@tanstack/vue-query": "^4.37.0",
-        "@zenstackhq/runtime": "^2.0.0-beta.10",
-        "@zenstackhq/server": "^2.0.0-beta.10",
+        "@zenstackhq/runtime": "^2.0.0",
+        "@zenstackhq/server": "^2.0.0",
         "isomorphic-fetch": "^3.0.0"
     }
 }

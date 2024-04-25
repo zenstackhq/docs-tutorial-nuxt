@@ -9,7 +9,6 @@ const onCreatePost = async () => {
     try {
         await createPost.mutateAsync({
             data: {
-                author: { connect: { id: session.value!.id } },
                 title: title.value,
                 content: 'My awesome content',
             },

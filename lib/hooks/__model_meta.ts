@@ -72,8 +72,10 @@ const metadata = {
                 }, authorId: {
                     name: "authorId",
                     type: "String",
+                    attributes: [{ "name": "@default", "args": [] }],
                     isForeignKey: true,
                     relationField: 'author',
+                    defaultValueProvider: $default$Post$authorId,
                 },
             }
             , uniqueConstraints: {
@@ -92,4 +94,7 @@ const metadata = {
     ,
     authModel: 'User'
 };
+function $default$Post$authorId(user: any): unknown {
+    return user?.id;
+}
 export default metadata;

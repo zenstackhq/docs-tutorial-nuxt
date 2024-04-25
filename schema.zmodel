@@ -24,11 +24,11 @@ plugin hooks {
  * User model
  */
 model User {
-    id String @id @default(cuid())
-    email String @unique @email
-    name String
+    id       String @id @default(cuid())
+    email    String @unique @email
+    name     String
     password String @password @omit @length(8, 16)
-    posts Post[]
+    posts    Post[]
 
     // everybody can signup
     @@allow('create', true)
@@ -44,14 +44,14 @@ model User {
  * Post model
  */
 model Post {
-    id String @id @default(cuid())
+    id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    title String @length(1, 256)
-    content String
-    published Boolean @default(false)
-    author User @relation(fields: [authorId], references: [id])
-    authorId String
+    title     String   @length(1, 256)
+    content   String
+    published Boolean  @default(false)
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String   @default(auth().id)
 
     // allow read for all signin users
     @@allow('read', auth() != null && published)

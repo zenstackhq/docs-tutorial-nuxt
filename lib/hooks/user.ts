@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { Prisma, User } from "@prisma/client";
+import type { Prisma, User } from ".zenstack/models";
 import type { UseMutationOptions, UseQueryOptions, UseInfiniteQueryOptions, InfiniteData } from '@tanstack/vue-query';
 import { getHooksContext } from '@zenstackhq/tanstack-query/runtime-v5/vue';
 import type { MaybeRefOrGetter, ComputedRef } from 'vue';
